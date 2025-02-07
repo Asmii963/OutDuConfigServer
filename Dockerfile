@@ -7,6 +7,10 @@ VOLUME /tmp
 # Make port 8080 available to the world outside this container
 EXPOSE 8888
 
+COPY pom.xml ./
+COPY src ./src
+RUN mvn clean package -DskipTests
+
 # The application's jar file
 ARG JAR_FILE=target/OutduConfigServer-0.0.1-SNAPSHOT.jar
 
