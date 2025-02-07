@@ -1,7 +1,6 @@
 # Stage 1: Build the JAR file
-FROM eclipse-temurin:21-jdk-alpine AS builder
+FROM maven:3.9.6-eclipse-temurin-21 AS builder
 WORKDIR /app
-RUN apt-get update && apt-get install -y maven
 COPY pom.xml ./
 COPY src ./src
 RUN mvn clean package -DskipTests
