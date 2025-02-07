@@ -1,21 +1,13 @@
-# Start with a base image containing Java runtime
-FROM openjdk:8-jdk-alpine
-
-# Add a volume pointing to /tmp
-VOLUME /tmp
-
-# Make port 8080 available to the world outside this container
-EXPOSE 8888
-
+# Stage 1: Build the JAR file
+FROM maven:3.8.5-openjdk-8 AS builder
+WORKDIR /app
 COPY pom.xml ./
 COPY src ./src
 RUN mvn clean package -DskipTests
 
-# The application's jar file
-ARG JAR_FILE=target/OutduConfigServer-0.0.1-SNAPSHOT.jar
-
-# Add the application's jar to the container
-ADD ${JAR_FILE} app.jar
-
-# Run the jar file
-ENTRYPOINT ["java","-Djava.security.egd=file:/dev/./urandom","-jar","/app.jar"]
+# Stage 2: Create the runtime image
+FROM openjdk:8-jdk-alpine
+WORKDIR /app
+EXPOSE 8888
+COPY --from=builder /app/target/OutduConfigServer-0.0.1-SNAPSHOT.jar app.jar
+ENTRYPOINT ["java", "-Djava.security.egd=file:/dev/./urandom", "-jar", "/app.jar"]
