@@ -31,9 +31,6 @@ jobs:
         run : |
           docker build -t 192.168.1.10:5000/outdu-config-server-build:latest .
 
-      - name: Test Registry Connection
-        run: |
-          curl -v http://192.168.1.10:5000/v2/_catalog || echo "Registry not reachable"
           
       - name: Log in to Private Docker Registry
         run: |
