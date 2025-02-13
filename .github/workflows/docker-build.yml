@@ -28,10 +28,6 @@ jobs:
         run: |
           ping -c 4 192.168.1.10 || echo "Registry not reachable"
 
-      - name: Log in to Private Docker Registry
-        run: |
-          echo "${{ secrets.DOCKER_REGISTRY_PASSWORD }}" | docker login --username "${{ secrets.DOCKER_REGISTRY_USERNAME }}" --password-stdin 192.168.1.10:5000
-          
       - name: Build Docker image
         run : |
           docker build -t 192.168.1.10:5000/outdu-config-server-build:latest .
