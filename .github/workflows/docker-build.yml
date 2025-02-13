@@ -22,18 +22,22 @@ jobs:
         run: |
           sudo mkdir -p /etc/docker
           echo '{ "insecure-registries": ["192.168.1.10:5000"] }' | sudo tee /etc/docker/daemon.json
+          sudo systemctl daemon-reload
           sudo systemctl restart docker
+          sudo systemctl restart containerd
 
 
       - name: Build Docker image
         run : |
           docker build -t 192.168.1.10:5000/outdu-config-server-build:latest .
 
-
+      - name: Test Registry Connection
+        run: |
+          curl -v http://192.168.1.10:5000/v2/ || echo "Registry not reachable"
+          
       - name: Log in to Private Docker Registry
         run: |
-          echo "${{ secrets.DOCKER_REGISTRY_PASSWORD }}" | docker login 192.168.1.10:5000 \
-          --username "${{ secrets.DOCKER_REGISTRY_USERNAME }}" --password-stdin
+          echo "${{ secrets.DOCKER_REGISTRY_PASSWORD }}" | docker login --username "${{ secrets.DOCKER_REGISTRY_USERNAME }}" --password-stdin 192.168.1.10:5000
 
 
 
