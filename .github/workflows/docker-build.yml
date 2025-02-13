@@ -23,6 +23,10 @@ jobs:
           mkdir -p ~/.docker
           echo '{ "insecure-registries": ["192.168.1.10:5000"] }' > ~/.docker/daemon.json
 
+      - name: Verify Docker Insecure Registry Configuration
+        run: |
+          echo "Checking if the registry is properly set as insecure..."
+          docker info | grep -i "Insecure Registries" || echo "Registry configuration not found!"
 
       - name: Check Registry Connection
         run: |
