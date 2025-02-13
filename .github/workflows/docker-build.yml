@@ -38,7 +38,7 @@ jobs:
 
       - name: Login to private registry
         run : |
-          docker login -u "admin" -p "dadmin123" 192.168.1.10:5000
+          docker login -u "admin" -p "dadmin123" http://192.168.1.10:5000
 
       - name: Push Docker image to private registry
         run: |
