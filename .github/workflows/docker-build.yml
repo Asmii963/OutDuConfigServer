@@ -6,7 +6,7 @@ on:
       branch:
         description: "Branch to run the workflow on"
         required: true
-        default: "dev"
+        default: "development"
 
 jobs:
   build-and-push-docker:
@@ -18,19 +18,23 @@ jobs:
         with:
           ref: ${{ github.event.inputs.branch }}
 
+      - name: Configure Docker to allow insecure registries
+        run: |
+          sudo mkdir -p /etc/docker
+          echo '{ "insecure-registries": ["192.168.1.10:5000"] }' | sudo tee /etc/docker/daemon.json
+          sudo systemctl restart docker
+
 
       - name: Build Docker image
         run : |
-          docker build -t zsacoutdu/outdu-config-server-builds:latest .
+          docker build -t 192.168.1.10:5000/outdu-config-server-builds:latest .
 
 
-      - name: Log in to Docker Hub
-        uses: docker/login-action@v1
-        with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
-
-
-      - name: Push Docker image
+      - name: Log in to Private Docker Registry
         run: |
-          docker push zsacoutdu/outdu-config-server-builds:latest
+          echo "${{ secrets.DOCKER_REGISTRY_PASSWORD }}" | docker login 192.168.1.10:5000 --username ${{ secrets.DOCKER_REGISTRY_USERNAME }} --password-stdin
+
+
+      - name: Push Docker image to private registry
+        run: |
+          docker push 192.168.1.10:5000/outdu-config-server:latest
