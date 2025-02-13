@@ -27,14 +27,16 @@ jobs:
 
       - name: Build Docker image
         run : |
-          docker build -t 192.168.1.10:5000/outdu-config-server-builds:latest .
+          docker build -t 192.168.1.10:5000/outdu-config-server-build:latest .
 
 
       - name: Log in to Private Docker Registry
         run: |
-          echo "${{ secrets.DOCKER_REGISTRY_PASSWORD }}" | docker login 192.168.1.10:5000 --username ${{ secrets.DOCKER_REGISTRY_USERNAME }} --password-stdin
+          echo "${{ secrets.DOCKER_REGISTRY_PASSWORD }}" | docker login 192.168.1.10:5000 \
+          --username "${{ secrets.DOCKER_REGISTRY_USERNAME }}" --password-stdin
+
 
 
       - name: Push Docker image to private registry
         run: |
-          docker push 192.168.1.10:5000/outdu-config-server:latest
+          docker push 192.168.1.10:5000/outdu-config-server-build:latest
