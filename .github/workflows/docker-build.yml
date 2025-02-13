@@ -39,10 +39,6 @@ jobs:
         run : |
           docker build -t 192.168.1.10:5000/outdu-config-server-build:latest .
 
-      - name: Login to private registry
-        run : |
-          docker login -u "admin" -p "dadmin123" http://192.168.1.10:5000
-
       - name: Push Docker image to private registry
         run: |
           docker push 192.168.1.10:5000/outdu-config-server-build:latest
