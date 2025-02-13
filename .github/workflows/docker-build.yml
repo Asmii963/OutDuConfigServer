@@ -20,8 +20,11 @@ jobs:
 
       - name: Configure Docker to allow insecure registries
         run: |
-          mkdir -p ~/.docker
-          echo '{ "insecure-registries": ["192.168.1.10:5000"] }' > ~/.docker/daemon.json
+          echo "Setting up Docker insecure registry..."
+          sudo mkdir -p /etc/docker
+          echo '{ "insecure-registries": ["192.168.1.10:5000"] }' | sudo tee /etc/docker/daemon.json
+          sudo systemctl daemon-reload
+          sudo systemctl restart docker
 
       - name: Verify Docker Insecure Registry Configuration
         run: |
