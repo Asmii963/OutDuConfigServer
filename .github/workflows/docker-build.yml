@@ -39,7 +39,7 @@ jobs:
           
       - name: Log in to Private Docker Registry
         run: |
-          echo "${{ secrets.DOCKER_REGISTRY_PASSWORD }}" | docker login --username "${{ secrets.DOCKER_REGISTRY_USERNAME }}" --password-stdin 192.168.1.10:5000
+          docker login -u "${{ secrets.DOCKER_REGISTRY_USERNAME }}" -p "${{ secrets.DOCKER_REGISTRY_PASSWORD }}" 192.168.1.10:5000
 
 
       - name: Push Docker image to private registry
