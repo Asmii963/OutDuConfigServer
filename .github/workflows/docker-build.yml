@@ -22,7 +22,7 @@ jobs:
         run: |
           echo "Setting up Docker insecure registry..."
           sudo mkdir -p /etc/docker
-          echo '{ "insecure-registries": ["192.168.1.10:5000"] }' | sudo tee /etc/docker/daemon.json
+          echo '{ "insecure-registries": ["106.51.73.87:5000"] }' | sudo tee /etc/docker/daemon.json
           sudo systemctl daemon-reload
           sudo systemctl restart docker
 
@@ -31,14 +31,10 @@ jobs:
           echo "Checking if the registry is properly set as insecure..."
           docker info | grep -i "Insecure Registries" || echo "Registry configuration not found!"
 
-      - name: Check Registry Connection
-        run: |
-          ping -c 4 192.168.1.10 || echo "Registry not reachable"
-
       - name: Build Docker image
         run : |
-          docker build -t 192.168.1.10:5000/outdu-config-server-build:latest .
+          docker build -t 106.51.73.87:5000/outdu-config-server-build:latest .
 
       - name: Push Docker image to private registry
         run: |
-          docker push 192.168.1.10:5000/outdu-config-server-build:latest
+          docker push 106.51.73.87:5000/outdu-config-server-build:latest
