@@ -35,6 +35,9 @@ jobs:
         run : |
           docker build -t 106.51.73.87:5000/outdu-config-server-build:latest .
 
+      - name: Login to Private Docker Registry
+        run: echo "${{ secrets.DOCKER_REGISTRY_PASSWORD }}" | docker login 106.51.73.87:5000 -u "${{ secrets.DOCKER_REGISTRY_USERNAME }}" --password-stdin
+
       - name: Push Docker image to private registry
         run: |
           docker push 106.51.73.87:5000/outdu-config-server-build:latest
